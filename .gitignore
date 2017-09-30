@@ -1,4 +1,5 @@
 jenkins*.war
+Session.vim
 *.swp
 *.swn
 *.log

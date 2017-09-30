@@ -4,12 +4,25 @@ Depending on the CI infrastructure setup one may need to run the ATH itself in a
 
 TO-DO: Instead of depending on setting this environment variable, in the future we could try to somehow automatically detect the situation.
 
-Interactive shell:
+Build the image and start the container:
 
-    $ docker build --build-arg=uid=$(id -u) --build-arg=gid=$(id -g) -t jenkins/ath src/main/resources/ath-container
-    $ docker run -it --rm -P -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/home/ath-user/ath --user ath-user jenkins/ath bash -c 'cd $HOME/ath && bash'
-    $ eval $(./vnc.sh)
-    $ ./run.sh firefox latest -Dmaven.test.failure.ignore=true -DforkCount=1 -B
+```
+docker build -t jenkins/ath src/main/resources/ath-container
+docker run -it --rm -P \
+    -v /var/run/docker.sock:/var/run/docker.sock  \
+    -v $(pwd):/home/ath-user/ath  \
+    jenkins/ath  \
+    --gid $(id -g) \
+    --uid $(id -u) \
+    bash
+```
+
+Setup and run the tests:
+
+```
+eval $(./vnc.sh)
+./run.sh firefox latest -Dmaven.test.failure.ignore=true -DforkCount=1 -B
+```
 
 Jenkinsfile:
 
